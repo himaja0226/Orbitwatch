@@ -1,24 +1,691 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#020816" />
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+  <title>OrbitWatch — Space Traffic & Debris Monitoring</title>
+</head>
 
-    <title>OrbitWatch</title>
-  </head>
+<body>
 
-  <body>
+  <div id="app">
 
-    <div id="app"></div>
+    <!-- =========================
+         TOP BAR
+         ========================= -->
 
-    <script
-      type="module"
-      src="/src/main.js"
-    ></script>
+    <header class="topbar">
 
-  </body>
+      <div class="brand">
+
+        <div class="brand-mark">
+          ◒
+        </div>
+
+        <div>
+          <div class="brand-name">
+            ORBITWATCH
+          </div>
+
+          <div class="brand-sub">
+            SPACE TRAFFIC & DEBRIS MONITORING
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="mode-switch">
+
+        <button
+          id="modeEarth"
+          class="mode-btn active"
+          type="button"
+        >
+          ◉ EARTH TRACKING
+        </button>
+
+        <button
+          id="modeSolar"
+          class="mode-btn"
+          type="button"
+        >
+          ☀ SOLAR SYSTEM
+        </button>
+
+      </div>
+
+
+      <div class="system-live">
+
+        <span class="live-dot"></span>
+
+        <span id="systemStatus">
+          LOADING
+        </span>
+
+        <span
+          class="clock"
+          id="dataClock"
+        >
+          --:--:-- UTC
+        </span>
+
+      </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN WORKSPACE
+         ========================= -->
+
+    <main class="workspace">
+
+
+      <!-- =========================
+           LEFT PANEL
+           ========================= -->
+
+      <aside class="left-panel">
+
+        <div class="search-wrap">
+
+          <span>⌕</span>
+
+          <input
+            id="search"
+            type="text"
+            autocomplete="off"
+            placeholder="Search satellite, planet or spacecraft..."
+          />
+
+          <div
+            id="searchResults"
+            class="search-results"
+            hidden
+          ></div>
+
+        </div>
+
+
+        <!-- EARTH TRACKING -->
+
+        <section id="earthControls">
+
+          <div class="section-title">
+            SATELLITES & OBJECTS
+          </div>
+
+          <div class="metric-list">
+
+            <div>
+              <span>✣ Active satellites</span>
+              <b id="activeCount">—</b>
+            </div>
+
+            <div>
+              <span>◷ Tracking catalog</span>
+              <b id="objectCount">—</b>
+            </div>
+
+            <div>
+              <span>⌁ Orbital paths</span>
+              <b id="orbitCount">—</b>
+            </div>
+
+          </div>
+
+
+          <div class="section-title">
+            QUICK TRACK
+          </div>
+
+          <div
+            id="quickList"
+            class="quick-list"
+          ></div>
+
+
+          <div class="section-title">
+            TRACKING STATUS
+          </div>
+
+          <div class="metric-list">
+
+            <div>
+              <span>Data source</span>
+              <b id="source">
+                Connecting…
+              </b>
+            </div>
+
+            <div>
+              <span>Propagator</span>
+              <b>
+                SGP4
+              </b>
+            </div>
+
+            <div>
+              <span>Screening</span>
+              <b class="green">
+                100 km
+              </b>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- SOLAR SYSTEM -->
+
+        <section
+          id="solarControls"
+          hidden
+        >
+
+          <div class="section-title">
+            SOLAR SYSTEM OBJECTS
+          </div>
+
+          <div class="metric-list">
+
+            <div>
+              <span>☀ Planets</span>
+              <b>8</b>
+            </div>
+
+            <div>
+              <span>🌙 Moon</span>
+              <b>1</b>
+            </div>
+
+            <div>
+              <span>🚀 Spacecraft</span>
+              <b>6</b>
+            </div>
+
+            <div>
+              <span>✦ Outer system</span>
+              <b>Active</b>
+            </div>
+
+          </div>
+
+
+          <div class="section-title">
+            QUICK SELECT
+          </div>
+
+
+          <div class="quick-list">
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Sun"
+            >
+              <span>☀</span>
+              Sun
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Mercury"
+            >
+              <span>●</span>
+              Mercury
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Venus"
+            >
+              <span>●</span>
+              Venus
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Earth"
+            >
+              <span>🌍</span>
+              Earth
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Moon"
+            >
+              <span>🌙</span>
+              Moon
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Mars"
+            >
+              <span>●</span>
+              Mars
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Jupiter"
+            >
+              <span>●</span>
+              Jupiter
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Saturn"
+            >
+              <span>●</span>
+              Saturn
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Uranus"
+            >
+              <span>●</span>
+              Uranus
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Neptune"
+            >
+              <span>●</span>
+              Neptune
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Voyager 1"
+            >
+              <span>🚀</span>
+              Voyager 1
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Voyager 2"
+            >
+              <span>🚀</span>
+              Voyager 2
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="New Horizons"
+            >
+              <span>🚀</span>
+              New Horizons
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Juno"
+            >
+              <span>🚀</span>
+              Juno
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Mars Reconnaissance Orbiter"
+            >
+              <span>🚀</span>
+              Mars Reconnaissance Orbiter
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="Mars Express"
+            >
+              <span>🚀</span>
+              Mars Express
+              <b>›</b>
+            </button>
+
+
+            <button
+              class="quick-btn"
+              type="button"
+              data-solar="BepiColombo"
+            >
+              <span>🚀</span>
+              BepiColombo
+              <b>›</b>
+            </button>
+
+          </div>
+
+
+          <div class="solar-note">
+
+            <div class="solar-note-art">
+              ✦ ☀ ✦
+            </div>
+
+            <strong>
+              Compressed solar scale
+            </strong>
+
+            <span>
+              Planet and spacecraft distances are visually compressed so the whole system can be explored.
+            </span>
+
+          </div>
+
+        </section>
+
+
+        <div class="left-footer">
+
+          <strong>
+            ORBITWATCH
+          </strong>
+
+          <span>
+            Live orbital awareness dashboard
+          </span>
+
+        </div>
+
+      </aside>
+
+
+      <!-- =========================
+           CESIUM VIEW
+           ========================= -->
+
+      <section class="scene-panel">
+
+        <div class="scene-heading">
+
+          <div>
+
+            <div
+              class="scene-title"
+              id="sceneTitle"
+            >
+              EARTH TRACKING
+            </div>
+
+            <div
+              class="scene-subtitle"
+              id="sceneSubtitle"
+            >
+              Live Earth-orbiting objects • SGP4 propagation • orbital paths
+            </div>
+
+          </div>
+
+          <div class="scene-badge">
+            ● LIVE VIEW
+          </div>
+
+        </div>
+
+
+        <div id="cesiumContainer"></div>
+
+
+        <div class="scene-controls">
+
+          <button
+            type="button"
+            title="Zoom in"
+            onclick="window.__zoom(0.55)"
+          >
+            ＋
+          </button>
+
+          <button
+            type="button"
+            title="Zoom out"
+            onclick="window.__zoom(1.8)"
+          >
+            −
+          </button>
+
+          <button
+            type="button"
+            title="Reset view"
+            onclick="window.__resetView()"
+          >
+            ◎
+          </button>
+
+        </div>
+
+
+        <div class="scene-legend">
+
+          <span>
+            <i class="cyan"></i>
+            Orbital path
+          </span>
+
+          <span>
+            <i class="white"></i>
+            Tracked object
+          </span>
+
+          <span>
+            <i class="orange"></i>
+            Alert threshold
+          </span>
+
+        </div>
+
+
+        <div
+          class="bottom-strip"
+          id="bottomStats"
+        ></div>
+
+      </section>
+
+
+      <!-- =========================
+           RIGHT PANEL
+           ========================= -->
+
+      <aside class="right-panel">
+
+
+        <!-- CONJUNCTION ALERTS -->
+
+        <section class="panel-card alerts-card">
+
+          <div class="panel-heading danger">
+
+            <span>
+              ⚠ CONJUNCTION ALERTS
+            </span>
+
+            <b id="alertCount">
+              0
+            </b>
+
+          </div>
+
+
+          <div
+            id="alerts"
+            class="alerts-list"
+          ></div>
+
+
+          <div class="panel-footnote">
+            Instantaneous screening • not a collision prediction
+          </div>
+
+        </section>
+
+
+        <!-- SELECTED OBJECT -->
+
+        <section class="panel-card">
+
+          <div id="selected">
+
+            <div class="empty-panel">
+
+              <span>
+                🛰
+              </span>
+
+              <strong>
+                Select a satellite
+              </strong>
+
+              <small>
+                Search or click an Earth-tracking object.
+              </small>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- AI ASSISTANT -->
+
+        <section class="panel-card assistant-card">
+
+          <div class="panel-heading">
+
+            <span>
+              ◉ AI SPACE ASSISTANT
+            </span>
+
+            <b class="ai-dot">
+              ●
+            </b>
+
+          </div>
+
+
+          <div
+            id="assistantMessages"
+            class="assistant-messages"
+          ></div>
+
+
+          <div class="assistant-prompts">
+
+            <button
+              type="button"
+              onclick="window.__ask('What is a TLE?')"
+            >
+              What is a TLE?
+            </button>
+
+            <button
+              type="button"
+              onclick="window.__ask('How does SGP4 work?')"
+            >
+              How does SGP4 work?
+            </button>
+
+            <button
+              type="button"
+              onclick="window.__ask('Are close approaches collisions?')"
+            >
+              Collision risk?
+            </button>
+
+          </div>
+
+
+          <div class="assistant-input">
+
+            <input
+              id="assistantInput"
+              type="text"
+              placeholder="Ask a space question..."
+            />
+
+            <button
+              id="assistantSend"
+              type="button"
+              aria-label="Send"
+            >
+              ➤
+            </button>
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </main>
+
+  </div>
+
+
+  <!-- Vite entry point -->
+
+  <script
+    type="module"
+    src="/src/main.js"
+  ></script>
+
+</body>
 </html>
